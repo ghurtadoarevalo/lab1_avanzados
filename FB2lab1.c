@@ -12,7 +12,7 @@ char** readData(char* fp_source_name_1)
 {
   	FILE *fp = NULL;
   	int size = 0;
-  	int count = 1;
+  	int count = 0;
   	int linesNumber = 0;
   	int lineLen = 1;
   	char* dataFileChar = NULL;
@@ -36,6 +36,7 @@ char** readData(char* fp_source_name_1)
   	dataFileChar = malloc(sizeof(char)*(size+1));
   	fread(dataFileChar,sizeof(char), size, fp);
   	fclose(fp);
+
     dataFileChar[size] = '\0';
   	//Se recorre el char* para encontrar la cantidad de palabras
   	for (int i = 0; i < size ; ++i)
@@ -70,7 +71,6 @@ char** readData(char* fp_source_name_1)
   	temp = malloc(sizeof(char)*(size+1));
   	strcpy(temp,dataFileChar);
   	token = strtok(temp, "\n");
-    lines[0] = malloc(sizeof(char)*2);
   	while(token != NULL)
   	{
         lines[count] = malloc(sizeof(char)*(size));
@@ -78,14 +78,81 @@ char** readData(char* fp_source_name_1)
         token = strtok(NULL, "\n");
   		  count++;
   	}
+
+    free(dataFileChar);
+    free(temp);
+
     return lines;
+}
+
+
+unsigned* aux_comb( unsigned *v, unsigned k, unsigned n, unsigned m )
+{
+   unsigned i;
+   static unsigned j;
+   if( m != 0 )
+   {
+      for( i = k; i <= n-m+1; ++i )
+      {
+         v[j] = i;
+         ++j;
+         aux_comb( v, i+1, n, m-1 );
+         --j;
+      }
+   }
+   else
+   {
+     return v;
+//      for( i = 0; i < j; ++i ){}
+//         printf( "%u ", v[i] );
+//      putchar('\n');
+   }
+}
+
+
+unsigned* comb( unsigned n, unsigned m )
+{
+   unsigned *v = malloc( n * sizeof *v );
+   v = aux_comb( v, 1, n, m );
+   printf("%u aaaaaaaaaaaaaaaa\n", aux_comb( v, 1, n, m )[]  );
+   return v;
+}
+
+
+
+void investmentCombinations()
+{
+  char* fp_source_name;
+  char** data;
+  int budget;
+  int investmentCount;
+  fp_source_name = "test1.txt";
+  data = readData(fp_source_name);
+  budget = atoi(data[0]);
+  investmentCount = atoi(data[1]);
+  unsigned ** allCombinations = malloc(sizeof(unsigned*)*investmentCount);
+
+  for (size_t i = 0; i < investmentCount; i++)
+  {
+      allCombinations[i] = comb(investmentCount, i);
+  }
+
+  printf("asdasdsadsad\n" );
+  printf("%u\n",allCombinations[0][0]);
+  printf("asdasdsadsad\n" );
+
+  // for (size_t i = 0; i < investmentCount; i++)
+  // {
+  //   for (size_t j = 0; j <= i; j++)
+  //   {
+  //       printf("%u \n", allCombinations[i][j]);
+  //   }
+  //   printf("\n");
+  // }
 }
 
 int main(int argc, char** argv)
 {
-  char* fp_source_name;
-  char** data;
-  fp_source_name = "test1.txt";
-  data = readData(fp_source_name);
-  printf("%s\n",data[1] );
+  investmentCombinations();
+  return 0;
 }
