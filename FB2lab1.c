@@ -5,6 +5,7 @@
 #include <time.h>
 #include <unistd.h>
 
+
 //Función encargada de leer todas las lineas del archivo con el nombre que contenga la variable fp_source_name_1
 //Entradas: nombre del archivo a leer
 //Salidas: Arreglo de arreglos de strings con los datos leídos del archivo
@@ -86,40 +87,6 @@ char** readData(char* fp_source_name_1)
 }
 
 
-unsigned* aux_comb( unsigned *v, unsigned k, unsigned n, unsigned m )
-{
-   unsigned i;
-   static unsigned j;
-   if( m != 0 )
-   {
-      for( i = k; i <= n-m+1; ++i )
-      {
-         v[j] = i;
-         ++j;
-         aux_comb( v, i+1, n, m-1 );
-         --j;
-      }
-   }
-   else
-   {
-     return v;
-//      for( i = 0; i < j; ++i ){}
-//         printf( "%u ", v[i] );
-//      putchar('\n');
-   }
-}
-
-
-unsigned* comb( unsigned n, unsigned m )
-{
-   unsigned *v = malloc( n * sizeof *v );
-   v = aux_comb( v, 1, n, m );
-   printf("%u aaaaaaaaaaaaaaaa\n", aux_comb( v, 1, n, m )[]  );
-   return v;
-}
-
-
-
 void investmentCombinations()
 {
   char* fp_source_name;
@@ -134,25 +101,87 @@ void investmentCombinations()
 
   for (size_t i = 0; i < investmentCount; i++)
   {
-      allCombinations[i] = comb(investmentCount, i);
+      //comb(investmentCount, 4);
   }
 
-  printf("asdasdsadsad\n" );
-  printf("%u\n",allCombinations[0][0]);
-  printf("asdasdsadsad\n" );
-
-  // for (size_t i = 0; i < investmentCount; i++)
-  // {
-  //   for (size_t j = 0; j <= i; j++)
-  //   {
-  //       printf("%u \n", allCombinations[i][j]);
-  //   }
-  //   printf("\n");
-  // }
+    // for (size_t i = 0; i < investmentCount; i++)
+    // {
+    //   for (size_t j = 0; j <= i; j++)
+    //   {
+    //       //printf("%d \n", allCombinations[i][j]);
+    //   }
+    //   printf("\n");
+    // }
 }
+//
+// /* Function to swap values at two pointers */
+// void swap(char *x, char *y)
+// {
+//     char temp;
+//     temp = *x;
+//     *x = *y;
+//     *y = temp;
+// }
+//
+// /* Function to print permutations of string
+//    This function takes three parameters:
+//    1. String
+//    2. Starting index of the string
+//    3. Ending index of the string. */
+// void permute(char *a, int l, int r)
+// {
+//    int i;
+//    if (l == r)
+//      printf("%s\n", a);
+//    else
+//    {
+//        for (i = l; i <= r; i++)
+//        {
+//           swap((a+l), (a+i));
+//           permute(a, l+1, r);
+//           swap((a+l), (a+i)); //backtrack
+//        }
+//    }
+// }
+
+void swap(int *x1,int *x2)
+{
+    int x=*x1;
+    *x1=*x2;
+    *x2=x;
+}
+
+void per(int *arr,int st,int ls)
+{
+    int i=0;
+    if(st==ls)
+    {
+        int k;
+        for(k=0;k<ls;k++)
+        {
+            printf("%d ",arr[k]);
+        }
+    printf("\n");
+    }
+    else
+    {
+        for(i=st;i<ls;i++)
+        {
+            swap(arr+st,arr+i);
+            per(arr,st+1,ls);
+            swap(arr+st,arr+i);
+        }
+    }
+}
+
 
 int main(int argc, char** argv)
 {
-  investmentCombinations();
+
+
+  int arr[3]={1,2,3};
+  int st=0;
+  int ls=2;
+  per(arr,st,ls);
   return 0;
 }
