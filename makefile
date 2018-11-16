@@ -1,4 +1,4 @@
-TARGET = emulador
+TARGET = FB2lab1
 LIBS = -lm
 CC = gcc
 CFLAGS = -g -Wall
