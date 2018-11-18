@@ -1,7 +1,7 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
-//Estructura que se utiliza para almacenar las inversiones
+//Estructura que se utiliza para almacenar una inversion
 typedef struct {
 	int cost;
 	int benefit;

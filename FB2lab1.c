@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <math.h>
 #include "functions.h"
+
 //Función encargada de leer todas las lineas del archivo con el nombre que contenga la variable fp_source_name_1
 //Entradas: nombre del archivo a leer
 //Salidas: Arreglo de arreglos de strings con los datos leídos del archivo
@@ -84,6 +85,11 @@ char** readData(char* fp_source_name_1)
     return lines;
 }
 
+//Función encargada de imprimir en pantalla cuando se activa el modo debug, las combinaciones de inversiones que
+//se van generando.
+//Entrada: Combinación de inversiones.
+//Salida: Impresión por pantalla al estar en modo debug de las combinaciones de inveriones con sus costos
+//totales y beneficios totales.
 void printCurrent(investments * combination)
  {
     #ifdef DEBUG
@@ -103,15 +109,15 @@ void printCurrent(investments * combination)
     #endif
 }
 
+//Función que genera todas las combinaciones posibles de inversiones (2**n)
+//Entrada: Lista de inversiones, cantidad de inversiones
+//Salida: Lista de combinación de inversiones
 investments ** powerSet(investment ** set, int set_size)
 {
-    /*set_size of power set of a set with set_size
-      n is (2**n -1)*/
     unsigned int pow_set_size = pow(2, set_size);
     investments ** investmentCombinations = malloc(sizeof(investments *)*pow_set_size);
     int counter, j,temp_cost,temp_benefit, temp_quantity, counter2 = 0, counter3;
 
-    /*Run from counter 000..0 to 111..1*/
     for(counter = 0; counter < pow_set_size; counter++)
     {
         counter3 = 0;
@@ -121,8 +127,8 @@ investments ** powerSet(investment ** set, int set_size)
         for(j = 0; j < set_size; j++)
         {
             combination->all[counter3] = (investment*)malloc(sizeof(investment));
-            /* Check if jth bit in the counter is set
-             If set then print jth element from set */
+            //Verifica si el bit j en el contador está estalblecido
+            //Si lo está, entonces se almacena el elemento j desde set
             if(counter & (1<<j))
             {
                  combination->all[counter3] = set[j];
@@ -144,7 +150,7 @@ investments ** powerSet(investment ** set, int set_size)
     return investmentCombinations;
 }
 
-
+//Función que entrega la mejor combinación de inversiones.
 //Entradas:  estructura con las combinaciones de inversiones, cantidad de inversiones disponibles, presupuesto
 //Salidas: entrega como salida un puntero al nodo inicial con la mejor combinación de inversiones.
 investments * bruteForce(investments ** investmentCombinations, int set_size, int budget)
@@ -161,11 +167,13 @@ investments * bruteForce(investments ** investmentCombinations, int set_size, in
             bestInvesment = investmentCombinations[i];
         }
     }
-    //printf("%d\n", bestInvesment->all[0]->cost);
 
     return bestInvesment;
 }
 
+//Función encargada de escribir la mejor solución en el archivo Salida.out
+//Entrada: Combinación de la mejor inversión.
+//Salida: Archivo Salida.out con la solución del problema.
 void getOutput(investments * best)
 {
     FILE *fp;
@@ -197,7 +205,7 @@ int main()
     char * token;
     int budget;
     int investmentCount;
-    fp_source_name = "entrada.in";
+    fp_source_name = "Entrada.in";
     data = readData(fp_source_name);
     budget = atoi(data[0]);
     investmentCount = atoi(data[1]);
@@ -207,8 +215,9 @@ int main()
 
     printf("\n\n <<%s>> \n\n","Bienvenido al laboratorio de fuerza bruta: Mejores inversiones" );
 
-    printf("\n\n %s \n\n","0) Leyendo información de Entrada.in");
+    printf("\n %s \n","0) Leyendo información de Entrada.in");
 
+    //Se leen y guardan los datos del archivo entrada.in
     for (size_t i = 2; i < investmentCount+2; i++)
     {
         temp = malloc(sizeof(char)*(100));
@@ -222,22 +231,21 @@ int main()
             token = strtok(NULL, " ");
         }
         readedInvestments[i-2] = a;
-
     }
 
-    printf("\n\n %s \n\n","1) Generación de todas las combinaciones posibles");
+    printf("\n %s \n","1) Generación de todas las combinaciones posibles");
 
     investmentCombinations = powerSet(readedInvestments, investmentCount);
 
-    printf("\n\n %s \n\n","2) Eligiendo la mejor opción");
+    printf("\n %s \n","2) Eligiendo la mejor opción");
 
     best = bruteForce(investmentCombinations, investmentCount, budget);
 
-    printf("\n\n %s \n\n","3) Guardando la mejor opción en Salida.out");
+    printf("\n %s \n","3) Guardando la mejor opción en Salida.out");
 
     getOutput(best);
 
-    printf("\n\n %s \n\n","4) Liberando memoria");
+    printf("\n %s \n","4) Liberando memoria");
 
     for (size_t i = 2; i < investmentCount + 2; i++)
     {
@@ -256,8 +264,10 @@ int main()
     }
 
     free(investmentCombinations);
-    
+
     free(best);
+
+    printf("\n %s \n","5) Fin del programa");
 
     return 0;
 }
